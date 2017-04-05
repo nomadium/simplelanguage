@@ -45,6 +45,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.math.BigInteger;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.oracle.truffle.api.Truffle;
 import com.oracle.truffle.api.debug.DebuggerTags;
@@ -207,6 +209,9 @@ public final class SLMain {
 
         PolyglotEngine engine = PolyglotEngine.newBuilder().setIn(in).setOut(out).build();
         assert engine.getLanguages().containsKey(SLLanguage.MIME_TYPE);
+
+        Set<String> supportedLanguages = engine.getLanguages().values().stream().map(l -> l.getName()).collect(Collectors.toSet());
+        out.println("== available languages: " + supportedLanguages);
 
         try {
             Value result = engine.eval(source);
